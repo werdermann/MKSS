@@ -1,37 +1,30 @@
 
-public class Produkt
-{	
+public class Produkt {
 	private int id = produktNr++;
 	private String name;
 	private static int produktNr = 0;
 
-	public static int getAnzahl() 
-	{
+	public static int getAnzahl() {
 		return produktNr;
 	}
 
-	public Produkt(String name) 
-	{
+	public Produkt(String name) {
 		super();
 		this.name = name;
 	}
 
-	public int getId() 
-	{
+	public int getId() {
 		return id;
 	}
 
-	public String getName() 
-	{
+	public String getName() {
 		return name;
 	}
 	
-	public int gibPreis ()
-	{
+	public int gibPreis () {
 		return 0;
 	}
 	
-	public void ausgeben()
-	{
+	public void ausgeben() {
 	}
 }

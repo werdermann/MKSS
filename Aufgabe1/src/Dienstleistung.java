@@ -1,6 +1,5 @@
 
-public class Dienstleistung extends Produkt 
-{
+public class Dienstleistung extends Produkt {
 	private int stunden, personen;
 
 	public Dienstleistung (String n, int p, int s){

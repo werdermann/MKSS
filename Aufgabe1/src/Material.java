@@ -6,22 +6,19 @@ public class Material extends Produkt
 
 	private int	anzahl;
 
-	public Material(String name, int stueckpreis, int anzahl)
-	{
+	public Material(String name, int stueckpreis, int anzahl) {
 		super(name);
 		this.stueckpreis = stueckpreis;
 		this.anzahl = anzahl;
 	}
 
 	@Override
-	public int gibPreis()
-	{
+	public int gibPreis() {
 		return stueckpreis * anzahl;
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return anzahl + " * " + getName();
 	}
 }
