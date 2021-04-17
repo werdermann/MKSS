@@ -6,39 +6,6 @@ import java.io.InputStreamReader;
 
 public class Eingabe {
 
-	public static boolean leseBoolean() {
-		boolean ergebnis;
-		try {
-			ergebnis = Boolean.parseBoolean(leseString());
-		} catch(NumberFormatException e) {
-			ergebnis = false;
-		}
-
-		return ergebnis;
-	}
-
-	public static double leseDouble() {
-		double ergebnis;
-		try {
-			ergebnis = Double.parseDouble(leseString());
-		} catch(NumberFormatException e) {
-			ergebnis = 0d;
-		}
-
-		return ergebnis;
-	}
-
-	public static float leseFloat() {
-		float ergebnis;
-		try {
-			ergebnis = Float.parseFloat(leseString());
-		} catch(NumberFormatException e) {
-			ergebnis = 0f;
-		}
-
-		return ergebnis;
-	}
-
 	public static int leseInt() {
 		int ergebnis = 0;
 		String v = null;

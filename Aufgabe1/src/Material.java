@@ -1,9 +1,7 @@
 
 
-public class Material extends Produkt
-{
+public class Material extends Produkt {
 	private int	stueckpreis;
-
 	private int	anzahl;
 
 	public Material(String name, int stueckpreis, int anzahl) {
@@ -18,7 +16,17 @@ public class Material extends Produkt
 	}
 
 	@Override
+	public String ausgeben() {
+		return anzahl + " * " + getName();
+	}
+
+	@Override
 	public String toString() {
 		return anzahl + " * " + getName();
+	}
+
+	@Override
+	public String getName() {
+		return super.getName();
 	}
 }

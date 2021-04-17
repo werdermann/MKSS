@@ -8,18 +8,18 @@ public class Dienstleistung extends Produkt {
 		personen=p;
 	}
 
-	public int gibPreis()
-	{
+	@Override
+	public int gibPreis() {
 		return 1242*stunden*personen;
 	}
-	
-//	public void ausgeben()
-//	{
-//		System.out.println(personen+" Nasen für "+stunden+"h "+getName());
-//	} 
-	
-	public String toString()
-	{
+
+	@Override
+	public String ausgeben() {
 		return personen+" Nasen für "+stunden+"h "+getName();
+	}
+
+	@Override
+	public String getName() {
+		return super.getName();
 	}
 }
