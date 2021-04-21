@@ -2,5 +2,5 @@ package partprices;
 
 public interface IVisitor 
 {
-	public void visit(IPart part);
+	void visit(IPart part);
 }

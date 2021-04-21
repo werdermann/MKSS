@@ -13,7 +13,8 @@ public class Main
 		c2.addChild(new BasePart("b4", 0.4));
 		
 		// create and use a price visitor
-		
+		PriceVisitor priceVisitor = new PriceVisitor();
+		priceVisitor.visit(c1);
 		// create and use a name visitor
 	}
 }

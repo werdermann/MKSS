@@ -2,11 +2,11 @@ package partprices;
 
 public interface IPart 
 {
-	public String getName();
-	public double getPrice();
+	String getName();
+	double getPrice();
 	
-	public void addChild(IPart child);
-	public IPart getChild(int idx);
+	void addChild(IPart child);
+	IPart getChild(int idx);
 	
-	public void accept(IVisitor visitor);
+	void accept(IVisitor visitor);
 }
