@@ -1,3 +1,8 @@
+package implementation;
+
+import model.IProdukt;
+import model.IProduktFactory;
+
 public class DienstleistungFactory implements IProduktFactory {
 
     @Override

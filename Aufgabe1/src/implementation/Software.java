@@ -1,3 +1,7 @@
+package implementation;
+
+import model.Produkt;
+
 public class Software extends Produkt {
     private int	stueckpreis;
     private int	anzahl;

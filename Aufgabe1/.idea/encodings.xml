@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/src/Bestellliste.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/src/Dienstleistung.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/frontend/Bestellliste.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/frontend/Bestellliste.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/implementation/Dienstleistung.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/implementation/Dienstleistung.java" charset="windows-1252" />
   </component>
 </project>

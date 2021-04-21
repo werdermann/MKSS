@@ -1,3 +1,6 @@
+package model;
+
+import model.IProdukt;
 
 public abstract class Produkt implements IProdukt {
 	private String name;

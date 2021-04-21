@@ -1,4 +1,6 @@
+package implementation;
 
+import model.Produkt;
 
 public class Material extends Produkt {
 	private int	stueckpreis;

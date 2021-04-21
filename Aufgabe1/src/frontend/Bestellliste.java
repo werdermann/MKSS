@@ -1,3 +1,9 @@
+package frontend;
+
+import implementation.Eingabe;
+import model.IProdukt;
+import model.IProduktFactory;
+
 import java.util.ArrayList;
 
 public class Bestellliste {
@@ -22,7 +28,7 @@ public class Bestellliste {
 			eingabe = Eingabe.leseInt();
 
 			if(eingabe > produktFactories.length || eingabe < 0) {
-				System.out.println("ungültig" );
+				System.out.println("ung\u00FCltig");
 				break ;
 			} else if(eingabe != 0) {
 				produkte.add(produktFactories[eingabe-1].createIProdukt());

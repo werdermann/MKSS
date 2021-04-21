@@ -1,3 +1,6 @@
+package implementation;
+
+import model.Produkt;
 
 public class Dienstleistung extends Produkt {
 	private int stunden, personen;
@@ -15,7 +18,7 @@ public class Dienstleistung extends Produkt {
 
 	@Override
 	public String ausgeben() {
-		return personen+" Nasen für "+stunden+"h "+getName();
+		return personen+ " Nasen f\u00FCr " +stunden+"h "+getName();
 	}
 
 	@Override

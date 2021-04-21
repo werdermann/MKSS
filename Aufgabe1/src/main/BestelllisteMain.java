@@ -1,4 +1,10 @@
+package main;
 
+import frontend.Bestellliste;
+import implementation.DienstleistungFactory;
+import implementation.MaterialFactory;
+import implementation.SoftwareFactory;
+import model.IProduktFactory;
 
 public class BestelllisteMain {
 	public static void main(String[] args) {
