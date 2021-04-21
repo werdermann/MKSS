@@ -15,30 +15,17 @@ public class Bestellliste {
 			System.out.println("Was wollen Sie machen?");
 			System.out.println("(0) Bestellung beenden");
 
-			int counter = 1;
-
-			for(IProduktFactory factory: produktFactories) {
-				System.out.println("(" + counter + ") " + factory.getName() + " bestellen");
-				counter++;
+			for(int i = 0; i < produktFactories.length; i++) {
+				System.out.println("(" + (i + 1) + ") " + produktFactories[i].getName() + " bestellen");
 			}
 
 			eingabe = Eingabe.leseInt();
 
-			if(eingabe == 0) {
-				break;
-			} else {
-				int eingabeWert = 1;
-				for(IProduktFactory factory: produktFactories) {
-					if(eingabe == eingabeWert) {
-						IProdukt neuesProdukt = factory.createIProdukt();
-						produkte.add(neuesProdukt);
-					}
-					eingabeWert++;
-				}
-				if(eingabe > produktFactories.length) {
-					System.out.println("ungültig" );
-					break ;
-				}
+			if(eingabe > produktFactories.length || eingabe < 0) {
+				System.out.println("ungültig" );
+				break ;
+			} else if(eingabe != 0) {
+				produkte.add(produktFactories[eingabe-1].createIProdukt());
 			}
 		} while(eingabe != 0);
 		bestellungSortieren() ;
