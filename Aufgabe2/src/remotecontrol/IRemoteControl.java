@@ -1,5 +1,6 @@
 package remotecontrol;
 
+
 /**
  *  Interface for a generic remote control.
  */

@@ -10,8 +10,8 @@ public class Main
 	 */
 	public static void main(String[] args) 
 	{
-		RemoteControl rc1 = new RemoteControl();
-		RemoteControl rc2 = new RemoteControl();
+		RemoteDecorator rc1 = new HomeDecorator(new RemoteControl());
+		RemoteDecorator rc2 = new GarageDecorator(new RemoteControl());
 		
 		// todo: configure the remote controls for different houses
 		
@@ -20,6 +20,8 @@ public class Main
 		rc1.onButtonPressed(1);
 		rc1.offButtonPressed(1);
 		rc1.undoButtonPressed();
+
+		System.out.println("###");
 		
 		rc2.onButtonPressed(1);
 		rc2.undoButtonPressed();
