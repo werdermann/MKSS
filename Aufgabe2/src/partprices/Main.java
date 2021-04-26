@@ -14,7 +14,10 @@ public class Main
 		
 		// create and use a price visitor
 		PriceVisitor priceVisitor = new PriceVisitor();
-		priceVisitor.visit(c1);
+		priceVisitor.visit(c2);
+
 		// create and use a name visitor
+		NameVisitor nameVisitor = new NameVisitor("b");
+		nameVisitor.visit(c2);
 	}
 }
