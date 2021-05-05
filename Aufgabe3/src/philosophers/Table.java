@@ -68,23 +68,8 @@ public class Table {
 	 */
 	public void releaseStick(int no) {
 		synchronized (this.sticks[no]) {
-			/*
-			if (!this.getPhilosopherByThread(Thread.currentThread()).equals(this.owners[no])) {
-				throw new RuntimeException();
-			}
-
-			 */
 			this.owners[no] = null;
 			this.sticks[no].notify();
-
-			/*
-			try {
-				this.sticks[no].notify();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			 */
 		}
 
 		// release the stick if the calling thread (philosoph) is the owner of the stick
