@@ -41,24 +41,23 @@ public class Table {
 	 */
 	public void getStick(int no) {
 
-		try {
-			synchronized (this.sticks[no]) {
+		synchronized (sticks[no]) {
 
-				while (this.owners[no] != null) {
-					/**
-					 * Wait for stick to be ready
-					 */
-					this.sticks[no].wait();
-				}
-
-				/**
-				 * Set current Philosopher as the owner
-				 */
-				this.owners[no] = this.getPhilosopherByThread(Thread.currentThread());
+			/**
+			 * Wait if there is an owner that has currently the stick
+			 */
+			while (owners[no] != null) {
+				try {
+					sticks[no].wait();
+				} catch (Exception ignored) { }
 			}
-		} catch (Exception ignored) { }
 
+			/**
+			 * Setup new owner of the stick
+			 */
+			owners[no] = getPhilosopherByThread(Thread.currentThread());
 
+		}
 		// grab the stick (or wait for it if not available)
 		// save the current owner in the owners array (use getPhilosopherByThread to fetch the philosopher of the invocation)
 		// note: think about synchronization. Which object you should use to ensure funtioning if multiple philosophs call at the same time 
@@ -76,15 +75,25 @@ public class Table {
 	 *  Implement me
 	 */
 	public void releaseStick(int no) {
-		synchronized (this.sticks[no]) {
+
+		synchronized (sticks[no]) {
+
 			/**
-			 * Set current owner to null to release the stick
+			 * If calling thread is owner of the stick
 			 */
-			this.owners[no] = null;
-			/**
-			 * Notify sticks
-			 */
-			this.sticks[no].notify();
+			if(this.getPhilosopherByThread(Thread.currentThread()).equals(owners[no])) {
+
+				/**
+				 * Release stick
+				 */
+				owners[no] = null;
+
+				/**
+				 * Notify users
+				 */
+				sticks[no].notify();
+			}
+
 		}
 
 		// release the stick if the calling thread (philosoph) is the owner of the stick
