@@ -1,0 +1,107 @@
+package philosophers;
+
+import java.util.Random;
+
+public class Philosopher implements Runnable {
+	public enum State {
+		THINKING,
+		WAITING_FOR_LEFT,
+		OWNING_LEFT,
+		WAITING_FOR_RIGHT,
+		EATING
+	}
+	
+	protected State state;
+	protected Random r = new Random();
+	protected int no;
+	protected Table t;
+	protected int eatcnt;
+	protected Thread mythread;
+	
+	public Philosopher(int no, Table t) {
+		this.no = no;
+		this.t = t;
+		this.state = State.THINKING;
+		t.addPhilosopher(no, this);
+	}
+	
+	/**
+	 *  Implement me
+	 */
+	public void run() {
+		this.mythread = Thread.currentThread();
+		while(true) {
+			this.setState(State.THINKING);
+			this.doSleep(200);
+			this.setState(State.WAITING_FOR_LEFT);
+			this.t.getLeftStick(this.no);
+			this.setState(State.OWNING_LEFT);
+			this.doSleep(10);
+			this.setState(State.WAITING_FOR_RIGHT);
+			this.t.getRightStick(this.no);
+			this.setState(State.EATING);
+			this.doSleep(200);
+			this.t.releaseRightStick(this.no);
+			this.t.releaseLeftStick(this.no);
+			// implement the lifecycle of the philosoph here
+			// set the philosophers state and wait when thinking and eating
+			// additionally you can wait before trying to fetch the second stick
+
+			// this.mythread.wait();
+
+			eatcnt++;
+		}
+	}
+
+	public State getState() {
+		return state;
+	}
+
+	public void setState(State state) {
+		this.state = state;
+	}
+	
+	public int getEatCnt() {
+		return eatcnt;
+	}
+	
+	public Thread getMyThread() {
+		return mythread;
+	}
+	
+	public int getNo() {
+		return no;
+	}
+
+	/**
+	 *  Implement me
+	 */
+	protected void doSleep(int time) {
+		if(!t.isWaitForClicks()) {
+			if (time > 0) {
+				try {
+					Thread.sleep(this.r.nextInt(time));
+				} catch (Exception ignored) { }
+			}
+			// implement time wait here (thread sleep)
+		} else {
+			try {
+				synchronized(this) {
+					this.wait();
+				}
+			} catch(InterruptedException ignored) { }
+		}
+	}
+	
+	public void notifyPhilosopher(int time) {
+		if(time > 0) {
+			doSleep(time);
+		}
+
+		try {
+			synchronized(this) {
+				this.notify();
+			}
+		} catch(Exception ignored) { }
+	}
+}
