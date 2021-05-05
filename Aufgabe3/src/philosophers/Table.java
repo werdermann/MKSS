@@ -40,15 +40,18 @@ public class Table {
 	 *  Implement me
 	 */
 	public void getStick(int no) {
-		synchronized (this.sticks[no]) {
-			while (this.owners[no] != null) {
-				try {
-					this.sticks[no].wait();
-				} catch (Exception ignored) { }
-			}
 
-			this.owners[no] = this.getPhilosopherByThread(Thread.currentThread());
-		}
+		try {
+			synchronized (this.sticks[no]) {
+
+				while (this.owners[no] != null) {
+					this.sticks[no].wait();
+				}
+
+				this.owners[no] = this.getPhilosopherByThread(Thread.currentThread());
+			}
+		} catch (Exception ignored) { }
+
 
 		// grab the stick (or wait for it if not available)
 		// save the current owner in the owners array (use getPhilosopherByThread to fetch the philosopher of the invocation)
@@ -68,7 +71,13 @@ public class Table {
 	 */
 	public void releaseStick(int no) {
 		synchronized (this.sticks[no]) {
+			/**
+			 * Set current owner to null
+			 */
 			this.owners[no] = null;
+			/**
+			 * Notify sticks
+			 */
 			this.sticks[no].notify();
 		}
 

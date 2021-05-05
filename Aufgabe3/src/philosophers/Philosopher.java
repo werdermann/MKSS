@@ -35,18 +35,21 @@ public class Philosopher implements Runnable {
 		// set the philosophers state and wait when thinking and eating
 		// additionally you can wait before trying to fetch the second stick
 
-		while(true) {
+		while (true) {
 			this.setState(State.THINKING);
 			this.doSleep(2000);
 
 			this.setState(State.WAITING_FOR_LEFT);
 			this.t.getLeftStick(this.no);
+			this.doSleep(500);
 
 			this.setState(State.OWNING_LEFT);
-			this.doSleep(1000);
+			this.doSleep(500);
 
 			this.setState(State.WAITING_FOR_RIGHT);
 			this.t.getRightStick(this.no);
+			this.doSleep(500);
+
 
 			this.setState(State.EATING);
 			this.doSleep(2000);
@@ -82,21 +85,17 @@ public class Philosopher implements Runnable {
 	 *  Implement me
 	 */
 	protected void doSleep(int time) {
-		if(!t.isWaitForClicks()) {
-			if (time > 0) {
 
-				try {
-					Thread.sleep(this.r.nextInt(time));
-				} catch (Exception ignored) { }
-			}
-			// implement time wait here (thread sleep)
-		} else {
-			try {
-				synchronized(this) {
+		try {
+			if(t.isWaitForClicks()) {
+				synchronized (this) {
 					this.wait();
 				}
-			} catch(InterruptedException ignored) { }
-		}
+			} else {
+				Thread.sleep(this.r.nextInt(time));
+			}
+		} catch (Exception ignored) { }
+
 	}
 	
 	public void notifyPhilosopher(int time) {
