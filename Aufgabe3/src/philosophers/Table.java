@@ -45,9 +45,15 @@ public class Table {
 			synchronized (this.sticks[no]) {
 
 				while (this.owners[no] != null) {
+					/**
+					 * Wait for stick to be ready
+					 */
 					this.sticks[no].wait();
 				}
 
+				/**
+				 * Set current Philosopher as the owner
+				 */
 				this.owners[no] = this.getPhilosopherByThread(Thread.currentThread());
 			}
 		} catch (Exception ignored) { }
@@ -72,7 +78,7 @@ public class Table {
 	public void releaseStick(int no) {
 		synchronized (this.sticks[no]) {
 			/**
-			 * Set current owner to null
+			 * Set current owner to null to release the stick
 			 */
 			this.owners[no] = null;
 			/**
