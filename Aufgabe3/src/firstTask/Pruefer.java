@@ -3,9 +3,9 @@ package firstTask;
 import java.util.concurrent.Semaphore;
 
 public class Pruefer extends Thread {
-    private Konto erstesKonto;
-    private Konto zweitesKonto;
-    private Semaphore semaphore;
+    private final Konto erstesKonto;
+    private final Konto zweitesKonto;
+    private final Semaphore semaphore;
 
     private int gesamtSumme = 0;
 
@@ -35,8 +35,7 @@ public class Pruefer extends Thread {
             System.out.println("Aktuelle Gesamtsumme: " + aktuelleGesamtsumme);
 
             if(gesamtSumme != aktuelleGesamtsumme) {
-                System.out.println("Aktuelle Gesamtsumme: " + aktuelleGesamtsumme);
-
+                System.out.println("FEHLER");
                 System.exit(0);
             }
 
