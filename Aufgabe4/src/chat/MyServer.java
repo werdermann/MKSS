@@ -1,5 +1,7 @@
 package chat;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -8,24 +10,31 @@ import java.net.Socket;
 
 public class MyServer {
     public static void main(String[] args) {
-        MyServer server = new MyServer();
-        server.startServer();
-    }
+        JFrame f = new JFrame("Server");
+        Container p = f.getContentPane();
+        JTextField tf = new JTextField(10);
+        JTextArea ta = new JTextArea(10, 30);
+        p.add(new JLabel("Received Messages"), BorderLayout.NORTH);
+        p.add(ta, BorderLayout.CENTER);
+        JPanel ps = new JPanel(new BorderLayout());
+        JButton send = new JButton("Send");
+        ps.add(tf, BorderLayout.CENTER);
+        ps.add(send, BorderLayout.EAST);
+        p.add(ps, BorderLayout.SOUTH);
+        f.pack();
+        f.setVisible(true);
 
-    private void startServer() {
         try {
             ServerSocket socket = new ServerSocket(5000);
-
             while (true) {
                 Socket client = socket.accept();
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-                BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
-                new MsgReceiver(reader).start();
+                new MsgReceiver(reader, ta).start();
 
-                while (true) out.println(input.readLine());
+                send.addActionListener(e -> out.println(tf.getText()));
             }
         } catch (Exception ignored) { }
     }
