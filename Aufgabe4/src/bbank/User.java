@@ -5,12 +5,13 @@ import java.io.Serializable;
 public class User implements Serializable {
 	private String name;
 	private int age;
-	private Account account;
-	
+	private SerializableAccount account;
+
+
 	public User(String name, int age, Account account) {
 		this.name = name;
 		this.age = age;
-		this.account = account;
+		this.account = new SerializableAccount(account.getNumber(), account.getAmount());
 	}
 
 	public String getName() {
