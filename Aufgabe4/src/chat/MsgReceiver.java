@@ -15,7 +15,6 @@ public class MsgReceiver extends Thread {
     @Override
     public void run() {
         super.run();
-
         try {
             while (true) textArea.append(reader.readLine() + "\n");
         } catch (Exception ignored) { }
