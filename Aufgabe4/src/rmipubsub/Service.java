@@ -10,15 +10,8 @@ import java.util.HashMap;
 public class Service extends UnicastRemoteObject implements ISubscribeService {
     private final HashMap<String, ArrayList<ISubscribeClient>> topics = new HashMap<>();
 
-    protected Service() throws RemoteException {
-    }
-
     protected Service(int port) throws RemoteException {
         super(port);
-    }
-
-    protected Service(int port, RMIClientSocketFactory csf, RMIServerSocketFactory ssf) throws RemoteException {
-        super(port, csf, ssf);
     }
 
     @Override
