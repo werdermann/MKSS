@@ -1,12 +1,15 @@
-package pubsub;
+package rmipubsub;
 
-public class Main {
-    public static void main(String[] args) {
-        Client client1 = new Client();
-        Client client2 = new Client();
-        Client client3 = new Client();
+import java.rmi.registry.Registry;
 
-        Service service = new Service();
+public class Client {
+
+    public Client(Registry registry, int port) throws Exception {
+        ISubscribeService service = (ISubscribeService) registry.lookup("Service");
+
+        SubscriberClient client1 = new SubscriberClient(port);
+        SubscriberClient client2 = new SubscriberClient(port);
+        SubscriberClient client3 = new SubscriberClient(port);
 
         service.subscribe(client1, "Dinosaurs!");
         service.subscribe(client2, "Cars!");
@@ -22,4 +25,5 @@ public class Main {
 
         service.publish("Cars!", "A new Tesla was just announced!");
     }
+
 }
