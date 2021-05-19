@@ -1,62 +1,38 @@
 package aufgabeasync;
 
-import java.util.Timer;
+import java.util.function.Consumer;
 
 public class BreakfastSync {
-
-	public static boolean randomsleep = false;
-
 
 	public static void main(String[] args) {
 
 		long start = System.currentTimeMillis();
 
-		System.out.println(getBread());
+		BreakfastListener<String> listener = new BreakfastListener<>();
+		Consumer<String> sequentialListener = s -> {
+			synchronized (s) {
+				try {
+					s.wait(10000);
+					System.out.println(s);
+				} catch (Exception ignored) {
+				}
+			}
+		};
 
-		BreakfastListener listener = new BreakfastListener();
+		// Runs sequential
+		sequentialListener.accept("Lecker Brötchen sind da");
 
+		// Runs parallel
 		listener.accept("Eier fertig");
 		listener.accept("Toast fertig");
 		listener.accept("Orangensaft ist frisch gepresst");
 
-		System.out.println(setTheTable());
+		// Runs sequential
+		sequentialListener.accept("Tisch ist gedeckt");
 
 		long end = System.currentTimeMillis();
 
-
-		System.out.println("Preparation needed: "+(end-start)/1000.d+" s");
-
-
-
-
-
+		System.out.println("Preparation needed: " + (end - start) / 1000.d + " s");
 	}
 
-	// TODO: Sequenziell
-	public static String getBread()
-	{
-		sleep(3, randomsleep);
-		return "Lecker Brötchen sind da";
-	}
-
-	// TODO: Sequenziell
-	public static String setTheTable()
-	{
-		sleep(3, randomsleep);
-		return "Tisch ist gedeckt";
-	}
-	
-	public static void sleep(long secs, boolean random)
-	{
-		long time = random? (long)(Math.random()*secs*1000): secs*1000;
-		
-		System.out.println("time is: "+time);
-		try {
-			Thread.sleep(time);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	
 }
