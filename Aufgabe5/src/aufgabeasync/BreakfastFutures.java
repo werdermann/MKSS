@@ -1,12 +1,12 @@
 package aufgabeasync;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.*;
 
 public class BreakfastFutures {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
-
-        System.out.println(calculateAsync().get());
 
         long start = System.currentTimeMillis();
         System.out.println(getBread().get());
@@ -19,31 +19,17 @@ public class BreakfastFutures {
 
     }
 
-    public static Future<String> calculateAsync() throws InterruptedException {
-        CompletableFuture<String> completableFuture = new CompletableFuture<>();
-
-        completableFuture.complete("Hello World");
-
-
-
-        /*
-        Executors.newCachedThreadPool().submit(() -> {
-            try {
-                Thread.sleep(500);
-                completableFuture.complete("Hello World");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-
-         */
-
-        return completableFuture;
-    }
-
     public static CompletableFuture<String> getBread() {
         CompletableFuture<String> completableFuture = new CompletableFuture<>();
-        completableFuture.complete("Lecker Brötchen sind da");
+
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                completableFuture.complete("Lecker Brötchen sind da");
+            }
+        };
+        new Timer().schedule(task, 3000);
         return completableFuture;
     }
 
