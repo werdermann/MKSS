@@ -1,158 +1,95 @@
 package aufgabeasync;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.*;
+import java.util.function.Consumer;
 
 public class BreakfastFuturesExecutor {
 
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
+    public static String activeProcess = "";
 
-        ExecutorService server = new ExecutorService() {
-            @Override
-            public void shutdown() {
+    public static void main(String[] args) {
+        long start = System.currentTimeMillis();
+        int[] counter = new int[1];
 
-            }
+        ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
+        Runnable runnable = () -> System.out.println("Service is running... " + activeProcess);
+        service.scheduleAtFixedRate(runnable, 0, 1, TimeUnit.SECONDS);
 
-            @Override
-            public List<Runnable> shutdownNow() {
-                return null;
-            }
 
-            @Override
-            public boolean isShutdown() {
-                return false;
-            }
-
-            @Override
-            public boolean isTerminated() {
-                return false;
-            }
-
-            @Override
-            public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
-                return false;
-            }
-
-            @Override
-            public <T> Future<T> submit(Callable<T> task) {
-                return null;
-            }
-
-            @Override
-            public <T> Future<T> submit(Runnable task, T result) {
-                return null;
-            }
-
-            @Override
-            public Future<?> submit(Runnable task) {
-                return null;
-            }
-
-            @Override
-            public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) throws InterruptedException {
-                return null;
-            }
-
-            @Override
-            public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException {
-                return null;
-            }
-
-            @Override
-            public <T> T invokeAny(Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException {
-                return null;
-            }
-
-            @Override
-            public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-                return null;
-            }
-
-            @Override
-            public void execute(Runnable command) {
-
+        Consumer<String> consumer = val -> {
+            System.out.println(val);
+            counter[0]++;
+            if (counter[0] == 3) {
+                setTheTable(service).thenAccept(table -> {
+                    System.out.println(table);
+                    long end = System.currentTimeMillis();
+                    System.out.println("Preparation needed: "+(end-start)/1000.d+" s");
+                });
             }
         };
 
-        long start = System.currentTimeMillis();
-
-        getBread().thenAccept(bread -> {
-            setTheTable().thenAccept(table -> {
-                System.out.println(table);
-                long end = System.currentTimeMillis();
-                System.out.println("Preparation needed: "+(end-start)/1000.d+" s");
-            });
+        getBread(service).thenAccept(bread -> {
             System.out.println(bread);
+            cookEggs(service).thenAccept(consumer);
+            toastToast(service).thenAccept(consumer);
+            pressOrangeJuice(service).thenAccept(consumer);
         });
 
-        System.out.println(cookEggs().get());
-        System.out.println(toastToast().get());
-        System.out.println(pressOrangeJuice().get());
     }
 
-    public static CompletableFuture<String> getBread() {
-        CompletableFuture<String> completableFuture = new CompletableFuture<>();
-
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                completableFuture.complete("Lecker Brötchen sind da");
-            }
+    public static CompletableFuture<String> getBread(ScheduledExecutorService service) {
+        activeProcess += "Brot holen... ";
+        CompletableFuture<String> future = new CompletableFuture<>();
+        Runnable runnable = () -> {
+            future.complete("Lecker Brötchen sind da");
+            activeProcess = activeProcess.replace("Brot holen... ", "");
         };
-        new Timer().schedule(task, 10000);
-        return completableFuture;
+        service.schedule(runnable, 10, TimeUnit.SECONDS);
+        return future;
     }
 
-    public static CompletableFuture<String> cookEggs() {
-        CompletableFuture<String> completableFuture = new CompletableFuture<>();
-
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                completableFuture.complete("Eier fertig");
-            }
+    public static CompletableFuture<String> cookEggs(ScheduledExecutorService service) {
+        activeProcess += "Eier kochen... ";
+        CompletableFuture<String> future = new CompletableFuture<>();
+        Runnable runnable = () -> {
+            future.complete("Eier fertig");
+            activeProcess = activeProcess.replace("Eier kochen... ", "");
         };
-        new Timer().schedule(task, 3000);
-        return completableFuture;
+        service.schedule(runnable, 3, TimeUnit.SECONDS);
+        return future;
     }
 
-    public static CompletableFuture<String> toastToast() {
-        CompletableFuture<String> completableFuture = new CompletableFuture<>();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                completableFuture.complete("Toast fertig");
-            }
+    public static CompletableFuture<String> toastToast(ScheduledExecutorService service) {
+        activeProcess += "Toast toasten... ";
+        CompletableFuture<String> future = new CompletableFuture<>();
+        Runnable runnable = () -> {
+            future.complete("Toast fertig");
+            activeProcess = activeProcess.replace("Toast toasten... ", "");
         };
-        new Timer().schedule(task, 3000);
-        return completableFuture;
+        service.schedule(runnable, 3, TimeUnit.SECONDS);
+        return future;
     }
 
-    public static CompletableFuture<String> pressOrangeJuice() {
-        CompletableFuture<String> completableFuture = new CompletableFuture<>();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                completableFuture.complete("Orangensaft ist frisch gepresst");
-            }
+    public static CompletableFuture<String> pressOrangeJuice(ScheduledExecutorService service) {
+        activeProcess += "Orangensaft pressen... ";
+        CompletableFuture<String> future = new CompletableFuture<>();
+        Runnable runnable = () -> {
+            future.complete("Orangensaft ist frisch gepresst");
+            activeProcess = activeProcess.replace("Orangensaft pressen... ", "");
         };
-        new Timer().schedule(task, 3000);
-        return completableFuture;
+        service.schedule(runnable, 3, TimeUnit.SECONDS);
+        return future;
     }
 
-    public static CompletableFuture<String> setTheTable() {
-        CompletableFuture<String> completableFuture = new CompletableFuture<>();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                completableFuture.complete("Tisch ist gedeckt");
-            }
+    public static CompletableFuture<String> setTheTable(ScheduledExecutorService service) {
+        activeProcess += "Tisch decken... ";
+        CompletableFuture<String> future = new CompletableFuture<>();
+        Runnable runnable = () -> {
+            future.complete("Tisch ist gedeckt");
+            activeProcess = activeProcess.replace("Tisch decken... ", "");
         };
-        new Timer().schedule(task, 10000);
-        return completableFuture;
+        service.schedule(runnable, 2, TimeUnit.SECONDS);
+        return future;
     }
 
 }
