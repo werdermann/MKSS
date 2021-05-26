@@ -21,52 +21,35 @@ public class BreakfastListener {
                });
            });
         });
-
     }
 
     public static void getBread(Consumer<String> listener) {
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                listener.accept("Lecker Brötchen sind da");
-            }
-        }, 10000);
+        schedule("Lecker Brötchen sind da", 10000, listener);
     }
 
     public static void cookEggs(Consumer<String> listener) {
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                listener.accept("Eier fertig");
-            }
-        }, 3000);
+        schedule("Eier fertig", 3000, listener);
     }
 
     public static void toastToast(Consumer<String> listener) {
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                listener.accept("Toast fertig");
-            }
-        }, 3000);
+        schedule("Toast fertig", 3000, listener);
     }
 
     public static void pressOrangeJuice(Consumer<String> listener) {
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                listener.accept("Orangensaft ist frisch gepresst");
-            }
-        }, 3000);
+        schedule("Orangensaft ist frisch gepresst", 3000, listener);
     }
 
     public static void setTheTable(Consumer<String> listener) {
+        schedule("Tisch ist gedeckt", 2000, listener);
+    }
+
+    public static void schedule(String msg, int delay, Consumer<String> listener) {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                listener.accept("Tisch ist gedeckt");
+                listener.accept(msg);
             }
-        }, 2000);
+        }, delay);
     }
 
 }
