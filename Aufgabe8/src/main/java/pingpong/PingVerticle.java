@@ -12,9 +12,7 @@ public class PingVerticle extends AbstractVerticle {
     @Override
     public void start() {
         vertx.setPeriodic(1000L, value -> vertx.eventBus().publish("Channel", "Today will be a beautiful day!"));
-        vertx.eventBus().consumer("Reply", (message) -> {
-            System.out.println("Reply: " + message.body());
-        });
+        vertx.eventBus().consumer("Reply", (message) -> System.out.println("Reply: " + message.body()));
     }
 
 }
