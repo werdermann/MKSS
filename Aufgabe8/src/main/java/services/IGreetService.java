@@ -9,8 +9,8 @@ import io.vertx.core.Handler;
 @VertxGen
 public interface IGreetService
 {
-	 public void greet(String name);
+	 void greet(String name);
 	 
-	 public void answer(String name, Handler<AsyncResult<String>> handler);
+	 void answer(String name, Handler<AsyncResult<String>> handler);
 }
 
