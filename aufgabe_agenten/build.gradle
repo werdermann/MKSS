@@ -1,0 +1,19 @@
+plugins {
+    id 'java-library'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
+
+repositories { 
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.activecomponents.jadex:jadex-distribution-standard:4.0.241"
+}
+
+
