@@ -45,6 +45,8 @@ public class QuizClientAgent
 	protected void subscribeAtService(IQuizService qs)
 	{
 		System.out.println("Client found quiz service: "+qs);
+
+		qs.participate();
 		
 		// if has no quizservice, subscribe and show connection in gui
 		// handle quiz events of service

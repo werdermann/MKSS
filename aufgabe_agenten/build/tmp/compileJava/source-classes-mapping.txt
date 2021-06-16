@@ -1,8 +1,8 @@
 quiz/QuizResults.java
  quiz.QuizResults
  quiz.QuizResults$Result
-quiz/QuizMasterAgent.java
- quiz.QuizMasterAgent
+counter/CounterAgent.java
+ counter.CounterAgent
 quiz/IQuizService.java
  quiz.IQuizService
 quiz/Question.java
@@ -11,16 +11,17 @@ helloworld/HelloWorldAgent.java
  helloworld.HelloWorldAgent
 quiz/Quiz.java
  quiz.Quiz
-quiz/Main.java
- quiz.Main
+quiz/QuizEvent.java
+ quiz.QuizEvent
 quiz/ResultEvent.java
  quiz.ResultEvent
 quiz/QuestionEvent.java
  quiz.QuestionEvent
-quiz/QuizEvent.java
- quiz.QuizEvent
+quiz/QuizMasterAgent.java
+ quiz.QuizMasterAgent
+ quiz.QuizMasterAgent$1
 quiz/QuizClientAgent.java
  quiz.QuizClientAgent
  quiz.QuizClientAgent$QuizGui
-counter/CounterAgent.java
- counter.CounterAgent
+quiz/Main.java
+ quiz.Main

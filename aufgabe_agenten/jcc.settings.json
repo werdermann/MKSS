@@ -1,0 +1,176 @@
+{
+	"__classname": "jadex.commons.Properties",
+	"subproperties": {
+		"__classname": "jadex.commons.Properties",
+		"__array": [
+			{
+				"__classname": "jadex.commons.Properties",
+				"subproperties": {
+					"__classname": "jadex.commons.Properties",
+					"__array": [
+						
+					]
+				},
+				"type": "vis",
+				"properties": {
+					"__classname": "jadex.commons.Property",
+					"__array": [
+						{
+							"__classname": "jadex.commons.Property",
+							"name": "jadex.tools.starter.StarterPlugin",
+							"type": "Starter",
+							"value": "true"
+						},
+						{
+							"__classname": "jadex.commons.Property",
+							"name": "jadex.tools.chat.ChatPlugin",
+							"type": "Chat",
+							"value": "true"
+						},
+						{
+							"__classname": "jadex.commons.Property",
+							"name": "jadex.tools.simcenter.SimulationServicePlugin",
+							"type": "ISimulationService",
+							"value": "true"
+						},
+						{
+							"__classname": "jadex.commons.Property",
+							"name": "jadex.tools.debugger.DebuggerPlugin",
+							"type": "Debugger",
+							"value": "true"
+						},
+						{
+							"__classname": "jadex.commons.Property",
+							"name": "jadex.tools.libtool.LibraryServicePlugin",
+							"type": "ILibraryService",
+							"value": "true"
+						},
+						{
+							"__classname": "jadex.commons.Property",
+							"name": "jadex.base.gui.componentviewer.ComponentViewerPlugin",
+							"type": "Component Viewer",
+							"value": "true"
+						},
+						{
+							"__classname": "jadex.commons.Property",
+							"name": "jadex.tools.security.SecurityServicePlugin",
+							"type": "ISecurityService",
+							"value": "true"
+						}
+					]
+				}
+			},
+			{
+				"__classname": "jadex.commons.Properties",
+				"subproperties": {
+					"__classname": "jadex.commons.Properties",
+					"__array": [
+						
+					]
+				},
+				"type": "controlcenter",
+				"properties": {
+					"__classname": "jadex.commons.Property",
+					"__array": [
+						{
+							"__classname": "jadex.commons.Property",
+							"type": "perspective",
+							"value": "Starter"
+						},
+						{
+							"__classname": "jadex.commons.Property",
+							"type": "consoleenabled",
+							"value": "false"
+						},
+						{
+							"__classname": "jadex.commons.Property",
+							"type": "consoleheights",
+							"value": "<?xml version='1.0' encoding='utf-8'?>\r\n<p0:HashMap xmlns:p0=\"typeinfo:java.util\" __ID=\"0\">&#xd;\n\t<entries>&#xd;\n\t\t<entry __ID=\"1\">&#xd;\n\t\t\t<key>&#xd;\n\t\t\t\t<p1:String xmlns:p1=\"typeinfo:java.lang\" __ID=\"2\">Starter.console.height</p1:String>&#xd;\n\t\t\t</key>&#xd;\n\t\t\t<value>&#xd;\n\t\t\t\t<p1:Double xmlns:p1=\"typeinfo:java.lang\" __ID=\"3\" content=\"1.0\"/>&#xd;\n\t\t\t</value>&#xd;\n\t\t</entry>&#xd;\n\t</entries>&#xd;\n</p0:HashMap>\r\n"
+						}
+					]
+				}
+			},
+			{
+				"__classname": "jadex.commons.Properties",
+				"subproperties": {
+					"__classname": "jadex.commons.Properties",
+					"__array": [
+						
+					]
+				},
+				"type": "Starter",
+				"properties": {
+					"__classname": "jadex.commons.Property",
+					"__array": [
+						{
+							"__classname": "jadex.commons.Property",
+							"type": "leftsplit_location",
+							"value": "0.7"
+						},
+						{
+							"__classname": "jadex.commons.Property",
+							"type": "mainsplit_location",
+							"value": "0.2998220640569395"
+						}
+					]
+				}
+			},
+			{
+				"__classname": "jadex.commons.Properties",
+				"subproperties": {
+					"__classname": "jadex.commons.Properties",
+					"__array": [
+						
+					]
+				},
+				"type": "window",
+				"properties": {
+					"__classname": "jadex.commons.Property",
+					"__array": [
+						{
+							"__classname": "jadex.commons.Property",
+							"type": "width",
+							"value": "1152"
+						},
+						{
+							"__classname": "jadex.commons.Property",
+							"type": "height",
+							"value": "650"
+						},
+						{
+							"__classname": "jadex.commons.Property",
+							"type": "x",
+							"value": "107"
+						},
+						{
+							"__classname": "jadex.commons.Property",
+							"type": "y",
+							"value": "153"
+						},
+						{
+							"__classname": "jadex.commons.Property",
+							"type": "extendedState",
+							"value": "0"
+						},
+						{
+							"__classname": "jadex.commons.Property",
+							"type": "jccexit",
+							"value": "ask"
+						},
+						{
+							"__classname": "jadex.commons.Property",
+							"type": "saveonexit",
+							"value": "true"
+						}
+					]
+				}
+			}
+		]
+	},
+	"properties": {
+		"__classname": "jadex.commons.Property",
+		"__array": [
+			
+		]
+	}
+}
