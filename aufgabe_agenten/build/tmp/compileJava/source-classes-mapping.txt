@@ -7,8 +7,8 @@ quiz/IQuizService.java
  quiz.IQuizService
 quiz/Question.java
  quiz.Question
-counter/CounterAgent.java
- counter.CounterAgent
+helloworld/HelloWorldAgent.java
+ helloworld.HelloWorldAgent
 quiz/Quiz.java
  quiz.Quiz
 quiz/Main.java
@@ -22,5 +22,5 @@ quiz/QuizEvent.java
 quiz/QuizClientAgent.java
  quiz.QuizClientAgent
  quiz.QuizClientAgent$QuizGui
-helloworld/HelloWorldAgent.java
- helloworld.HelloWorldAgent
+counter/CounterAgent.java
+ counter.CounterAgent
