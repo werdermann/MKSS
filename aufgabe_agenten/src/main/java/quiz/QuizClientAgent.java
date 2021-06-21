@@ -2,6 +2,7 @@ package quiz;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.util.Collection;
 import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
@@ -15,7 +16,7 @@ import javax.swing.SwingUtilities;
 
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.ServiceScope;
-import jadex.commons.future.IFuture;
+import jadex.commons.future.*;
 import jadex.commons.gui.SGUI;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.OnService;
@@ -40,18 +41,52 @@ public class QuizClientAgent
 	
 	/** The question count. */
 	protected int questioncnt;
-	
+
+	boolean areListenersConfigured = false;
+
 	@OnService(name="quizservice")
 	protected void subscribeAtService(IQuizService qs)
 	{
-		System.out.println("Client found quiz service: "+qs);
+		quizservice = qs;
 
-		qs.participate();
-		
-		// if has no quizservice, subscribe and show connection in gui
-		// handle quiz events of service
-		//   on QuestionEvents display the question in gui
-		//   on ResultEvent display the result in gui
+		System.out.println("Client found quiz service: "+qs);
+		gui.setQuizService(qs);
+
+		qs.participate().addResultListener(agent.createResultListener(new IIntermediateResultListener<>() {
+			@Override
+			public void intermediateResultAvailable(QuizEvent result) {
+
+				if (result instanceof QuestionEvent) {
+					gui.setQuestion(((QuestionEvent) result).question);
+					questioncnt = ((QuestionEvent) result).getCount();
+				} else if (result instanceof ResultEvent) {
+					gui.setResult(((ResultEvent) result).results.toString());
+				}
+
+				System.out.println("Result available!!");
+			}
+
+			@Override
+			public void finished() {
+				System.out.println("Finished");
+			}
+
+			@Override
+			public void maxResultCountAvailable(int max) {
+
+			}
+
+			@Override
+			public void resultAvailable(Collection<QuizEvent> result) {
+				System.out.println("Collection available!!");
+
+			}
+
+			@Override
+			public void exceptionOccurred(Exception exception) {
+				System.out.println("Exception occurred");
+			}
+		}));
 	}
 	
 	/**
@@ -126,6 +161,17 @@ public class QuizClientAgent
 				{
 					AbstractButton button = buttons.nextElement();
 					button.setText(question!=null? question.getAnswers().get(i++): "");
+
+					int finalI = i;
+
+					if(!areListenersConfigured) {
+						areListenersConfigured = true;
+						button.addActionListener(actionEvent -> {
+							System.out.println("Answer: Btn Id: " + finalI + " QuestionCnt: " + questioncnt);
+							quizservice.processAnswer(finalI, questioncnt).get();
+						});
+					}
+
 				}
 				bg.clearSelection();
 			});
@@ -136,10 +182,8 @@ public class QuizClientAgent
 		 */
 		public void setResult(String result)
 		{
-			SwingUtilities.invokeLater(()-> 
-			{
-				la.setText(result);
-			});
+			SwingUtilities.invokeLater(()->
+					la.setText(result));
 		}
 		
 		/**
@@ -147,10 +191,8 @@ public class QuizClientAgent
 		 */
 		public void setQuizService(IQuizService quizser)
 		{
-			SwingUtilities.invokeLater(()-> 
-			{
-				conl.setText(quizser!=null? "Connected with "+quizser: "");
-			});
+			SwingUtilities.invokeLater(()->
+					conl.setText(quizser!=null? "Connected with "+quizser: ""));
 		}
 	}
 }

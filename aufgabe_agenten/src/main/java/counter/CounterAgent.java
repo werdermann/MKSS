@@ -1,6 +1,5 @@
 package counter;
 
-import helloworld.HelloWorldAgent;
 import jadex.base.PlatformConfigurationHandler;
 import jadex.base.Starter;
 import jadex.bridge.IExternalAccess;

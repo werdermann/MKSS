@@ -1,16 +1,11 @@
 package quiz;
 
-import java.awt.desktop.QuitEvent;
-import java.lang.reflect.Array;
-import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
-import jadex.bridge.ComponentIdentifier;
+import java.util.*;
+
 import jadex.bridge.IComponentIdentifier;
 import jadex.bridge.IInternalAccess;
+import jadex.bridge.ServiceCall;
 import jadex.bridge.service.annotation.OnStart;
 import jadex.commons.Boolean3;
 import jadex.commons.future.*;
@@ -46,39 +41,21 @@ public class QuizMasterAgent implements IQuizService
 	@OnStart
 	public void start()
 	{
-		while (true) {
-			Question currentQuestion = quiz.questions.get(questioncnt);
+		quiz = createQuiz();
 
-			if(questioncnt < quiz.questions.size()) {
+		while (true) {
+
+			System.out.println("Counter: " + questioncnt);
+
+			if(questioncnt < quiz.getNumberOfQuestions()) {
+				Question question = quiz.getQuestion(questioncnt);
+				publishQuestion(question, questioncnt);
 				questioncnt++;
+				agent.waitForDelay(delay).get();
 			} else {
 				questioncnt = 0;
 			}
-
-			for (Map.Entry<IComponentIdentifier, SubscriptionIntermediateFuture<QuizEvent>> entry: subscriptions.entrySet()) {
-
-				entry.getValue().addIntermediateResult(currentQuestion);
-
-				//entry.getKey().
-			}
 		}
-
-
-
-
-
-
-		// fetch next question from quiz (start from first when max)
-		// send it to the subscribers
-
-
-
-
-
-
-
-
-		// wait some time 
 	}
 	
 	/**
@@ -118,8 +95,12 @@ public class QuizMasterAgent implements IQuizService
 
 		Question question3 = new Question();
 		question3.setQuestion("How much is  3^7 * 2 - 3 + 9^2 - 61^4");
-		question3.setSolution(3);
+		question3.setSolution(2);
 		question3.setAnswers(answers3);
+
+		quiz.addQuestion(question1);
+		quiz.addQuestion(question2);
+		quiz.addQuestion(question3);
 
 		return quiz;
 	}
@@ -130,7 +111,17 @@ public class QuizMasterAgent implements IQuizService
 	 */
 	public void publishQuestion(Question question, int questioncnt)
 	{
+		System.out.println("Publish Question!");
+
 		// send question to all subscribers
+		QuestionEvent event = new QuestionEvent(question, questioncnt);
+
+		System.out.println("Subscriptions: " + subscriptions.entrySet().size());
+
+		for (Map.Entry<IComponentIdentifier, SubscriptionIntermediateFuture<QuizEvent>> entry: subscriptions.entrySet()) {
+			System.out.println("Send Question");
+			entry.getValue().addIntermediateResult(event);
+		}
 	}
 	
 	/**
@@ -143,16 +134,25 @@ public class QuizMasterAgent implements IQuizService
 		// create a subscription future and save it per caller
 		// set termination command to remove subscription when terminated
 
-		ComponentIdentifier identifier = new ComponentIdentifier();
+		IComponentIdentifier caller = ServiceCall.getCurrentInvocation().getCaller();
+
+		System.out.println("Caller: " + caller.getLocalName());
+
 		SubscriptionIntermediateFuture<QuizEvent> future = new SubscriptionIntermediateFuture<>();
 		TerminationCommand command = new TerminationCommand() {
 			@Override
 			public void terminated(Exception reason) {
-				subscriptions.remove(identifier);
+				subscriptions.remove(caller);
 			}
 		};
+
 		future.setTerminationCommand(command);
-		subscriptions.put(identifier, future);
+		subscriptions.put(caller, future);
+
+		QuestionEvent event = new QuestionEvent();
+		event.setQuestion(quiz.getQuestion(questioncnt));
+
+		future.addIntermediateResult(event);
 
 		return future;
 	}
@@ -163,11 +163,56 @@ public class QuizMasterAgent implements IQuizService
 	 */
 	public IFuture<Void> processAnswer(int answer, int questioncnt)
 	{
-		// create QuizResults if caller has none
-		// add new result to its QuizResults
-		// check if all questions have been played 
-		// if yes: send result event to client, set subscription to finished and remove it
-	
+		System.out.println("####");
+
+
+		QuizResults quizResults;
+
+		Question question = quiz.getQuestion(questioncnt);
+
+		IComponentIdentifier caller = ServiceCall.getCurrentInvocation().getCaller();
+
+		if (!results.containsKey(caller)) {
+
+			quizResults = new QuizResults();
+			results.put(caller, quizResults);
+
+		} else {
+			quizResults = results.get(caller);
+		}
+
+		if(quizResults.results.isEmpty()) {
+
+			System.out.println("Is empty --> A D D");
+
+			quizResults.addResult(questioncnt, answer == question.solution);
+		} else {
+			for(QuizResults.Result result: results.get(caller).results) {
+				if(questioncnt == result.getNo()) {
+					System.out.println("Question is already answered!");
+				} else {
+					System.out.println("Added Question!: Counter: " + questioncnt + "  " + result.getNo());
+
+					quizResults.addResult(questioncnt, answer == question.solution);
+					break;
+				}
+			}
+		}
+
+
+
+
+		System.out.println("Current Result Count: " + quizResults.results.size());
+
+		System.out.println("Questions In Quiz: " + quiz.questions.size());
+
+		System.out.println("####\n");
+
+		if(quizResults.results.size() == quiz.questions.size()) {
+			subscriptions.get(caller).addIntermediateResult(new ResultEvent(quizResults));
+			subscriptions.remove(caller);
+		}
+
 		return IFuture.DONE;
 	}
 }
