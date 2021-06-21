@@ -61,6 +61,7 @@ public class QuizClientAgent
 					questioncnt = ((QuestionEvent) result).getCount();
 				} else if (result instanceof ResultEvent) {
 					gui.setResult(((ResultEvent) result).results.toString());
+					gui.setConl("Subscription ended");
 				}
 
 				System.out.println("Result available!!");
@@ -193,6 +194,11 @@ public class QuizClientAgent
 		{
 			SwingUtilities.invokeLater(()->
 					conl.setText(quizser!=null? "Connected with "+quizser: ""));
+		}
+
+		public void setConl(String text) {
+			SwingUtilities.invokeLater(()->
+					conl.setText(text));
 		}
 	}
 }
