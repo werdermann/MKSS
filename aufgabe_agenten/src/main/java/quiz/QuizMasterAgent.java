@@ -44,9 +44,6 @@ public class QuizMasterAgent implements IQuizService
 		quiz = createQuiz();
 
 		while (true) {
-
-			System.out.println("Counter: " + questioncnt);
-
 			if(questioncnt < quiz.getNumberOfQuestions()) {
 				Question question = quiz.getQuestion(questioncnt);
 				publishQuestion(question, questioncnt);
@@ -111,15 +108,10 @@ public class QuizMasterAgent implements IQuizService
 	 */
 	public void publishQuestion(Question question, int questioncnt)
 	{
-		System.out.println("Publish Question!");
-
 		// send question to all subscribers
 		QuestionEvent event = new QuestionEvent(question, questioncnt);
 
-		System.out.println("Subscriptions: " + subscriptions.entrySet().size());
-
 		for (Map.Entry<IComponentIdentifier, SubscriptionIntermediateFuture<QuizEvent>> entry: subscriptions.entrySet()) {
-			System.out.println("Send Question");
 			entry.getValue().addIntermediateResult(event);
 		}
 	}
@@ -130,13 +122,7 @@ public class QuizMasterAgent implements IQuizService
 	 */
 	public ISubscriptionIntermediateFuture<QuizEvent> participate()
 	{
-		// called by clients to join
-		// create a subscription future and save it per caller
-		// set termination command to remove subscription when terminated
-
 		IComponentIdentifier caller = ServiceCall.getCurrentInvocation().getCaller();
-
-		System.out.println("Caller: " + caller);
 
 		SubscriptionIntermediateFuture<QuizEvent> future = new SubscriptionIntermediateFuture<>();
 		TerminationCommand command = new TerminationCommand() {
@@ -150,7 +136,7 @@ public class QuizMasterAgent implements IQuizService
 		subscriptions.put(caller, future);
 
 		QuestionEvent event = new QuestionEvent();
-		event.setQuestion(quiz.getQuestion(questioncnt));
+		event.setQuestion(quiz.questions.stream().findFirst().get());
 
 		future.addIntermediateResult(event);
 
@@ -161,21 +147,14 @@ public class QuizMasterAgent implements IQuizService
 	 *  Send an answer.
 	 *  @param answer The answer.
 	 */
-	public IFuture<Void> processAnswer(int answer, int questioncnt)
+	public IFuture<Void> processAnswer(int answer, int answeredQuestionNumber)
 	{
-		System.out.println("####");
-
 		QuizResults quizResults;
-
-		Question question = quiz.getQuestion(questioncnt);
-
+		Question question = quiz.getQuestion(answeredQuestionNumber);
 		IComponentIdentifier caller = ServiceCall.getCurrentInvocation().getCaller();
-
-		System.out.println(caller);
 
 		if (caller != null) {
 			if (!results.containsKey(caller)) {
-
 				quizResults = new QuizResults();
 				results.put(caller, quizResults);
 
@@ -183,38 +162,25 @@ public class QuizMasterAgent implements IQuizService
 				quizResults = results.get(caller);
 			}
 
-			if(quizResults.results.isEmpty()) {
+			boolean isQuestionAnswered = false;
 
-				System.out.println("Is empty --> A D D");
-
-				quizResults.addResult(questioncnt, answer == question.solution);
-			} else {
-				for(QuizResults.Result result: results.get(caller).results) {
-					if(questioncnt == result.getNo()) {
-						System.out.println("Question is already answered!");
-					} else {
-						System.out.println("Added Question!: Counter: " + questioncnt + "  " + result.getNo());
-
-						quizResults.addResult(questioncnt, answer == question.solution);
-						break;
-					}
+			for(QuizResults.Result result: results.get(caller).results) {
+				if(answeredQuestionNumber == result.getNo()) {
+					isQuestionAnswered = true;
+					result.correct = answer == question.solution;
+					break;
 				}
 			}
 
-			System.out.println("Current Result Count: " + quizResults.results.size());
-
-			System.out.println("Questions In Quiz: " + quiz.questions.size());
-
-			System.out.println("####\n");
+			if (!isQuestionAnswered) {
+				quizResults.addResult(answeredQuestionNumber, answer == question.solution);
+			}
 
 			if(quizResults.results.size() == quiz.questions.size()) {
-
 				subscriptions.get(caller).addIntermediateResult(new ResultEvent(quizResults));
 				subscriptions.remove(caller);
 			}
 		}
-
-
 
 		return IFuture.DONE;
 	}
