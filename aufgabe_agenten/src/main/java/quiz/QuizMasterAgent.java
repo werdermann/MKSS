@@ -136,7 +136,7 @@ public class QuizMasterAgent implements IQuizService
 
 		IComponentIdentifier caller = ServiceCall.getCurrentInvocation().getCaller();
 
-		System.out.println("Caller: " + caller.getLocalName());
+		System.out.println("Caller: " + caller);
 
 		SubscriptionIntermediateFuture<QuizEvent> future = new SubscriptionIntermediateFuture<>();
 		TerminationCommand command = new TerminationCommand() {
@@ -165,53 +165,56 @@ public class QuizMasterAgent implements IQuizService
 	{
 		System.out.println("####");
 
-
 		QuizResults quizResults;
 
 		Question question = quiz.getQuestion(questioncnt);
 
 		IComponentIdentifier caller = ServiceCall.getCurrentInvocation().getCaller();
 
-		if (!results.containsKey(caller)) {
+		System.out.println(caller);
 
-			quizResults = new QuizResults();
-			results.put(caller, quizResults);
+		if (caller != null) {
+			if (!results.containsKey(caller)) {
 
-		} else {
-			quizResults = results.get(caller);
-		}
+				quizResults = new QuizResults();
+				results.put(caller, quizResults);
 
-		if(quizResults.results.isEmpty()) {
+			} else {
+				quizResults = results.get(caller);
+			}
 
-			System.out.println("Is empty --> A D D");
+			if(quizResults.results.isEmpty()) {
 
-			quizResults.addResult(questioncnt, answer == question.solution);
-		} else {
-			for(QuizResults.Result result: results.get(caller).results) {
-				if(questioncnt == result.getNo()) {
-					System.out.println("Question is already answered!");
-				} else {
-					System.out.println("Added Question!: Counter: " + questioncnt + "  " + result.getNo());
+				System.out.println("Is empty --> A D D");
 
-					quizResults.addResult(questioncnt, answer == question.solution);
-					break;
+				quizResults.addResult(questioncnt, answer == question.solution);
+			} else {
+				for(QuizResults.Result result: results.get(caller).results) {
+					if(questioncnt == result.getNo()) {
+						System.out.println("Question is already answered!");
+					} else {
+						System.out.println("Added Question!: Counter: " + questioncnt + "  " + result.getNo());
+
+						quizResults.addResult(questioncnt, answer == question.solution);
+						break;
+					}
 				}
+			}
+
+			System.out.println("Current Result Count: " + quizResults.results.size());
+
+			System.out.println("Questions In Quiz: " + quiz.questions.size());
+
+			System.out.println("####\n");
+
+			if(quizResults.results.size() == quiz.questions.size()) {
+
+				subscriptions.get(caller).addIntermediateResult(new ResultEvent(quizResults));
+				subscriptions.remove(caller);
 			}
 		}
 
 
-
-
-		System.out.println("Current Result Count: " + quizResults.results.size());
-
-		System.out.println("Questions In Quiz: " + quiz.questions.size());
-
-		System.out.println("####\n");
-
-		if(quizResults.results.size() == quiz.questions.size()) {
-			subscriptions.get(caller).addIntermediateResult(new ResultEvent(quizResults));
-			subscriptions.remove(caller);
-		}
 
 		return IFuture.DONE;
 	}

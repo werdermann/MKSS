@@ -11,7 +11,7 @@ import jadex.bridge.service.types.cms.CreationInfo;
 public class Main
 {
 	/**
-	 *  Main method.
+	 *  Main method
 	 */
 	public static void main(String[] args)
 	{
@@ -19,6 +19,6 @@ public class Main
 
 		platform.createComponent(new CreationInfo().setFilenameClass(QuizMasterAgent.class)).get();
 		platform.createComponent(new CreationInfo().setFilenameClass(QuizClientAgent.class)).get();
-
+		platform.createComponent(new CreationInfo().setFilenameClass(QuizClientAgent.class)).get();
 	}
 }
